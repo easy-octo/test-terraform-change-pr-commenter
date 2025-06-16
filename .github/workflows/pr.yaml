@@ -28,6 +28,6 @@ jobs:
         run: echo "Hello World"
     
   terraform-plan:
-    uses: jburns24/test-terraform-change-pr-commenter/.github/workflows/terraform-plan.yaml@8d4a9f3e7cf5327012968bec5e997a6065f50256
+    uses: jburns24/test-terraform-change-pr-commenter/.github/workflows/terraform-plan.yaml@cd61d55c990ccf9e975a9f5ef3e5e770987d7841
     with:
       message: "Composite workflow change works"
