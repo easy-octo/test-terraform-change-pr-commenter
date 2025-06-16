@@ -1,0 +1,41 @@
+# ---------------------------
+# Terraform & OpenTofu
+# ---------------------------
+# Local directories created by terraform / opentofu init
+.terraform/
+.tofu/
+
+# Local state files
+*.tfstate
+*.tfstate.*
+
+# Crash logs
+crash.*.log
+
+# CLI output plans
+*.tfplan
+*.plan
+
+# Variable files that may contain secrets (do **not** ignore if you purposely commit example files)
+*.tfvars
+*.tfvars.json
+
+# Override files (rarely needed in VCS)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Module/package archives downloaded locally
+*.zip
+
+# ---------------------------
+# Terragrunt
+# ---------------------------
+.terragrunt-cache/
+terragrunt-debug*.log
+
+# ---------------------------
+# Generic
+# ---------------------------
+.DS_Store
