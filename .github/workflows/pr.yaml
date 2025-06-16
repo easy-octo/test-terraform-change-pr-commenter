@@ -1,0 +1,33 @@
+name: 'Terraform PR'
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [ master ]
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  pull-requests: write
+
+jobs:
+  init:
+    name: 'Terraform Plan'
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Echo
+        run: echo "Hello World"
+    
+  terraform-plan:
+    uses: jburns24/test-terraform-change-pr-commenter/.github/workflows/terraform-plan.yaml@8d4a9f3e7cf5327012968bec5e997a6065f50256
+    with:
+      message: "Composite workflow change works"
