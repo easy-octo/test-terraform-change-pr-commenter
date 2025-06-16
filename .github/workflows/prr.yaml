@@ -26,7 +26,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: "us-east-1"
-          role-to-assume: arn:aws:iam::183631309559:role/dob-platform-gha-role
+          role-to-assume: arn:aws:iam::183631309559:role/dob-platform-gha-role # Removed from trust relation. Add back if you want to test
           role-session-name: github-action_dob-platform-pr-plan-oidc
 
       - uses: alexellis/arkade-get@master
