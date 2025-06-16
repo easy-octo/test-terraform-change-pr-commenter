@@ -1,0 +1,57 @@
+name: 'Terraform PR'
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [ master ]
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  pull-requests: write
+
+jobs:
+  terraform:
+    name: 'Terraform Plan'
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: "us-east-1"
+          role-to-assume: arn:aws:iam::183631309559:role/dob-platform-gha-role # Removed from trust relation. Add back if you want to test
+          role-session-name: github-action_dob-platform-pr-plan-oidc
+
+      - uses: alexellis/arkade-get@master
+        with:
+          tofu: latest
+          terragrunt: latest
+
+      - name: Terragrunt Plan
+        id: terragrunt_plan
+        run: |
+          pwd
+          terragrunt init --terragrunt-non-interactive
+          terragrunt plan --terragrunt-non-interactive -out plan.out
+          terragrunt show --terragrunt-non-interactive -no-color -json plan.out > plan.json
+        continue-on-error: true # Continue on error to ensure the plan is added as a comment on the PR.
+
+      - uses: liatrio/terraform-change-pr-commenter@workflowcall-conditional
+        with:
+          json-file: plan.json
+          expand-comment: true
+          comment-header: Plan Summary from pull_request event
+          include-plan-job-summary: true
+          hide-previous-comments: true
+          include-workflow-link: true
+
+      - name: Status
+        if: contains(steps.*.outcome, 'failure')
+        run: exit 1
