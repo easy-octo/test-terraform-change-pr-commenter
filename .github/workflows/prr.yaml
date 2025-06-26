@@ -43,9 +43,9 @@ jobs:
           terragrunt show --terragrunt-non-interactive -no-color -json plan.out > plan.json
         continue-on-error: true # Continue on error to ensure the plan is added as a comment on the PR.
 
-      - uses: liatrio/terraform-change-pr-commenter@add-filename-back
+      - uses: liatrio/terraform-change-pr-commenter@trim-large-comments
         with:
-          json-file: plan.json
+          json-file: tf_test_large.json
           expand-comment: true
           comment-header: Plan Summary from pull_request event
           include-plan-job-summary: true
