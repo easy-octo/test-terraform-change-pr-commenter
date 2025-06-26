@@ -45,7 +45,7 @@ jobs:
 
       - uses: liatrio/terraform-change-pr-commenter@trim-large-comments
         with:
-          json-file: tf_test_large.json
+          json-file: plan.json
           expand-comment: true
           comment-header: Plan Summary from pull_request event
           include-plan-job-summary: true
