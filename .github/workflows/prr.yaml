@@ -45,7 +45,9 @@ jobs:
 
       - uses: liatrio/terraform-change-pr-commenter@v1.12.0
         with:
-          json-file: plan.json
+          json-file: |
+            plan.json
+            tf_test3.json
           expand-comment: true
           comment-header: Show filename in header test
           include-plan-job-summary: true
