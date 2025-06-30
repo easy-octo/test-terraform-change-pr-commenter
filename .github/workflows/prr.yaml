@@ -2,6 +2,9 @@ name: 'Terraform PR'
 
 on:
   workflow_dispatch:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    branches: [ master ]
   pull_request:
     types: [opened, synchronize, reopened]
     branches: [ master ]
@@ -26,7 +29,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: "us-east-1"
-          role-to-assume: arn:aws:iam::183631309559:role/dob-platform-gha-role # Removed from trust relation. Add back if you want to test
+          role-to-assume: arn:aws:iam::183631309559:role/dob-platform-gha-role ## Removed from trust relation. Add back if you want to test
           role-session-name: github-action_dob-platform-pr-plan-oidc
 
       - uses: alexellis/arkade-get@master
@@ -43,11 +46,14 @@ jobs:
           terragrunt show --terragrunt-non-interactive -no-color -json plan.out > plan.json
         continue-on-error: true # Continue on error to ensure the plan is added as a comment on the PR.
 
-      - uses: liatrio/terraform-change-pr-commenter@workflowcall-conditional
+      - uses: liatrio/terraform-change-pr-commenter@add-pull-request-target-event
         with:
-          json-file: plan.json
+          json-file: |
+            plan.json
+            tf_test3.json
+            tf_test_large.json
           expand-comment: true
-          comment-header: Plan Summary from pull_request event
+          comment-header: Show filename in header test
           include-plan-job-summary: true
           hide-previous-comments: true
           include-workflow-link: true
